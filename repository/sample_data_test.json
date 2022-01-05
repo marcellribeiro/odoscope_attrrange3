@@ -1,0 +1,34 @@
+{
+  "site_id": "brax",
+  "TimeAgo": 30,
+  "TimeStep": 1,
+  "OutliersDetectionMethod": "3-sigmas",
+  "MetricesList": ["Revenue", "Basket"],
+  "MinVisitorsPerTimeStep": 30, 
+  "OutliersDetection": {"OutliersMultiplier": 2, "StrongOutliersMultiplier": 3},
+  "Attributes": [{
+      "Name": "Attribute Name",
+      "Metrics": [
+        {
+          "Name": "Metric Name",
+          "Values": [
+            {
+              "Id": "123456789123456",
+              "Value": 25.01,
+              "Time": "2022-01-04T10:00:00Z"
+            },
+            {
+              "Id": "789789989798798",
+              "Value": 15.89,
+              "Time": "2022-01-04T10:00:00Z"
+            },
+            {
+              "Id": "000000000000000",
+              "Value": 28.69,
+              "Time": "2022-01-04T10:00:00Z"
+            }
+          ]
+        }
+      ]
+  }]
+}

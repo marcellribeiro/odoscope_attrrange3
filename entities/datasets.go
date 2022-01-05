@@ -1,5 +1,10 @@
 package entities
 
+import (
+	"context"
+	"time"
+)
+
 type Datasets struct {
 	SiteId                  string            `string:"siteId"`
 	TimeAgo                 int               `int:"TimeAgo"`
@@ -27,7 +32,25 @@ type Metrics struct {
 }
 
 type MetricsValues struct {
-	Id    string  `string:"id"`
-	Value float64 `float64:"value"`
-	Date  string  `string:"id"`
+	Id    string    `string:"id"`
+	Value float64   `float64:"value"`
+	Date  time.Time `string:"date"`
+}
+
+type MetricsList []MetricsValues
+
+func (m MetricsList) Len() int {
+	return len(m)
+}
+
+func (m MetricsList) Less(i, j int) bool {
+	return m[i].Date.Before(m[j].Date)
+}
+
+func (m MetricsList) Swap(i, j int) {
+	m[i], m[j] = m[j], m[i]
+}
+
+type CalculatorUseCase interface {
+	CalculatorService(ctx context.Context) (OutliersResult, error)
 }

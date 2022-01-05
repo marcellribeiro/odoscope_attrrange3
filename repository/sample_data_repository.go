@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -9,7 +8,7 @@ import (
 	"github.com/marcellribeiro/odoscope_attrrange3/entities"
 )
 
-func MakeSampleData() entities.Datasets {
+func MakeSampleData() (entities.Datasets, error) {
 	attributes := []string{"first_attr"}
 	metricesList := []string{"Revenue", "Basket"}
 	siteId := "brax"
@@ -34,7 +33,7 @@ func MakeSampleData() entities.Datasets {
 			StrongOutliersMultiplier: strongOutliersMultiplier,
 		},
 		Attributes: makeSampleAttributes(minVisitors, sampleRows, attributes, metricesList, timeAgo),
-	}
+	}, nil
 }
 
 func makeSampleAttributes(minVisitors int, sampleRows int, attributes []string, metricesList []string, timeAgo int) []entities.Attributes {
@@ -86,7 +85,7 @@ func makeSampleMetricValue(minVisitors int) float64 {
 	return r
 }
 
-func makeSampleTime(timeAgo int) string {
+func makeSampleTime(timeAgo int) time.Time {
 	t := time.Now()
 	timeAgoNegative := 0 - timeAgo
 
@@ -95,7 +94,8 @@ func makeSampleTime(timeAgo int) string {
 	delta := max - min
 
 	sec := rand.Int63n(delta) + min
-	temporaryTime := time.Unix(sec, 0)
+	unixTime := time.Unix(sec, 0)
+	//temporaryTime := unixTime.Format("2006-01-02 15:04:05")
 
-	return fmt.Sprintf("%d", temporaryTime)
+	return unixTime
 }

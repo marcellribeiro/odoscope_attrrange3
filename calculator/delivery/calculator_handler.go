@@ -1,30 +1,34 @@
 package delivery
 
 import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"strings"
+
+	"github.com/gin-gonic/gin"
 	"github.com/marcellribeiro/odoscope_attrrange3/entities"
 )
 
-type ResponseError struct {
-	Message string `json:"message"`
+type CalcDelivery struct {
+	OutliersResult     entities.OutliersResult
+	OutliersResultJson string
 }
 
-type CalculatorHandler struct {
-	CalcUsecase entities.CalculatorUsecase
+func CalculatorDelivery(a entities.OutliersResult, g *gin.Engine) {
+	b, err := json.Marshal(a)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(b))
+
+	delivery := &CalcDelivery{OutliersResult: a, OutliersResultJson: string(b)}
+	g.GET("/", delivery.attrrange3)
+	g.GET("/attrrange3", delivery.attrrange3)
 }
 
-// func NewCalculatorHandler(engine *gin.Engine, us entities.CalculatorUsecase) {
-// 	handler := &CalculatorHandler{
-// 		CalcUsecase: us,
-// 	}
-// 	engine.GET("/attrrange3", handler.ThreeSigmasMethod)
-// }
-
-// func (a *CalculatorHandler) ThreeSigmasMethod(c gin.Context) {
-// 	data := ""
-// 	result, err := a.CalcUsecase.ThreeSigmasMethod(data)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, ResponseError{Message: err.Error()})
-// 	}
-
-// 	c.JSON(http.StatusOK, result)
-// }
+func (c *CalcDelivery) attrrange3(ctx *gin.Context) {
+	jsonStr := c.OutliersResultJson
+	ctx.DataFromReader(http.StatusOK, int64(len(jsonStr)), gin.MIMEJSON, strings.NewReader(jsonStr), nil)
+}
