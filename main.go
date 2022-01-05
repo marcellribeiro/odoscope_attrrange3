@@ -1,31 +1,21 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
-	"github.com/gin-gonic/gin"
-	"github.com/marcellribeiro/odoscope_attrrange3/calculator/delivery"
-	"github.com/marcellribeiro/odoscope_attrrange3/entities"
-	"github.com/spf13/viper"
+	"github.com/marcellribeiro/odoscope_attrrange3/repository"
 )
 
-func init() {
-	viper.SetConfigFile("config.json")
-	viper.SetConfigType("json")
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
-	}
-}
-
 func main() {
-	r := gin.New()
-	var config entities.Config
-	if err := viper.Unmarshal(&config); err != nil {
+	sampleData := repository.MakeSampleData()
+
+	b, err := json.Marshal(sampleData)
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	delivery.NewCalculatorHandler(r, config)
+	fmt.Println(string(b))
 
-	r.Run()
+	// delivery.NewCalculatorHandler(r, config)
 }
